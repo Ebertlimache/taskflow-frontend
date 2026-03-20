@@ -9,7 +9,7 @@ const navItems = [
 export function Sidebar({ onLogout, onNavigate, className = '' }) {
   return (
     <aside
-      className={`flex h-full w-64 shrink-0 flex-col border-r border-slate-800 bg-[#111827] ${className}`}
+      className={`flex h-screen w-64 shrink-0 flex-col border-r border-slate-800 bg-[#111827] ${className}`}
     >
       <div className="flex h-16 items-center gap-2 border-b border-slate-800 px-6">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600">
