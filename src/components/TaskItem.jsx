@@ -1,6 +1,6 @@
-import { Check } from 'lucide-react'
+import { Check, Trash2 } from 'lucide-react'
 
-export function TaskItem({ task, onToggle, onEdit }) {
+export function TaskItem({ task, onToggle, onEdit, onDelete, deleting }) {
   const pending = !task.completed
 
   return (
@@ -22,11 +22,13 @@ export function TaskItem({ task, onToggle, onEdit }) {
           e.stopPropagation()
           onToggle(task.id)
         }}
+        disabled={deleting}
         className={[
           'flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors',
           task.completed
             ? 'border-indigo-500 bg-indigo-600 text-white'
             : 'border-slate-500 hover:border-indigo-400',
+          deleting ? 'opacity-50' : '',
         ].join(' ')}
         aria-label={task.completed ? 'Mark incomplete' : 'Mark complete'}
       >
@@ -52,6 +54,24 @@ export function TaskItem({ task, onToggle, onEdit }) {
       >
         {pending ? 'Pending' : 'Completed'}
       </span>
+
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onDelete?.(task)
+        }}
+        disabled={deleting}
+        className="shrink-0 rounded-lg p-2 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+        aria-label={deleting ? 'Deleting task' : 'Delete task'}
+        title="Delete task"
+      >
+        {deleting ? (
+          <span className="block h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent" />
+        ) : (
+          <Trash2 className="h-4 w-4" />
+        )}
+      </button>
     </div>
   )
 }

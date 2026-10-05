@@ -1,6 +1,6 @@
 import { TaskItem } from './TaskItem'
 
-export function TaskList({ tasks, onToggle, onEdit }) {
+export function TaskList({ tasks, onToggle, onEdit, onDelete, deletingId }) {
   if (!tasks?.length) {
     return (
       <div className="rounded-xl border border-dashed border-slate-700 bg-slate-800/30 py-16 text-center text-slate-500">
@@ -17,6 +17,8 @@ export function TaskList({ tasks, onToggle, onEdit }) {
           task={task}
           onToggle={onToggle}
           onEdit={onEdit}
+          onDelete={onDelete}
+          deleting={deletingId === task.id}
         />
       ))}
     </div>

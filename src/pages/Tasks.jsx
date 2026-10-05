@@ -4,6 +4,7 @@ import { TaskList } from '../components/TaskList'
 import { Modal } from '../components/Modal'
 import {
   createTask,
+  deleteTask,
   fetchTasks,
   updateTask,
 } from '../services/taskService'
@@ -15,6 +16,7 @@ export default function Tasks() {
   const [filter, setFilter] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState(null)
+  const [deletingId, setDeletingId] = useState(null)
 
   const loadTasks = useCallback(async () => {
     setError('')
@@ -100,6 +102,29 @@ export default function Tasks() {
     }
   }
 
+  const handleDelete = async (task) => {
+    if (!task?.id) return
+    const confirmed = window.confirm(
+      `Delete task "${task.title}"? This cannot be undone.`
+    )
+    if (!confirmed) return
+
+    setError('')
+    setDeletingId(task.id)
+    try {
+      await deleteTask(task.id)
+      setTasks((prev) => prev.filter((t) => t.id !== task.id))
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          'Could not delete task'
+      )
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -163,6 +188,8 @@ export default function Tasks() {
           tasks={filteredTasks}
           onToggle={handleToggle}
           onEdit={openEdit}
+          onDelete={handleDelete}
+          deletingId={deletingId}
         />
       )}
 
